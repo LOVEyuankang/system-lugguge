@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.net.metadata.mapper.SysLogMapper" >
+  <resultMap id="BaseResultMap" type="com.net.metadata.entity.SysLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="login_name" property="loginName" jdbcType="VARCHAR" />
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    <result column="opt_content" property="optContent" jdbcType="VARCHAR" />
+    <result column="client_ip" property="clientIp" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="command" property="command" jdbcType="VARCHAR" />
+    <result column="operationobj" property="operationobj" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, login_name, role_name, opt_content, client_ip, create_time,command,operationobj
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from syslog
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="findDataGrid" resultMap="BaseResultMap" parameterType="PageInfo">
+    SELECT * FROM (
+      SELECT TOP (${from}+${size}) ROW_NUMBER() OVER(ORDER BY ID ASC) AS rowid,
+      <include refid="Base_Column_List" />
+      FROM syslog p
+      <where>
+        <if test=" condition.loginName != null and condition.loginName != '' ">
+          or p.login_name like '%${condition.loginName}%'
+          or p.opt_content like '%${condition.loginName}%'
+          or p.client_ip like '%${condition.loginName}%'
+          or p.create_time like '%${condition.loginName}%'
+          or p.command like '%${condition.loginName}%'
+          or p.operationobj like '%${condition.loginName}%'
+        </if>
+      </where>
+      order by create_time desc
+    ) AS t WHERE rowid &gt; ${from}
+  </select>
+
+  <select id="findDataGridCount" resultType="java.lang.Integer" parameterType="PageInfo">
+    select count(*) count
+    from syslog p
+    <where>
+      <if test=" condition.loginName != null and condition.loginName != '' ">
+        or p.login_name like '%${condition.loginName}%'
+        or p.opt_content like '%${condition.loginName}%'
+        or p.client_ip like '%${condition.loginName}%'
+        or p.create_time like '%${condition.loginName}%'
+        or p.command like '%${condition.loginName}%'
+        or p.operationobj like '%${condition.loginName}%'
+      </if>
+    </where>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from syslog where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="SysLog" >
+    insert into syslog (login_name, role_name, opt_content, client_ip, create_time,command,operationobj)
+    values (
+      #{loginName,jdbcType=VARCHAR},
+      #{roleName,jdbcType=VARCHAR},
+      #{optContent,jdbcType=VARCHAR},
+      #{clientIp,jdbcType=VARCHAR},
+      #{createTime,jdbcType=VARCHAR},
+      #{command,jdbcType=VARCHAR},
+      #{operationobj,jdbcType=VARCHAR}
+    )
+  </insert>
+
+  <insert id="insertSelective" parameterType="SysLog" >
+    insert into syslog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="loginName != null" >
+        login_name,
+      </if>
+      <if test="roleName != null" >
+        role_name,
+      </if>
+      <if test="optContent != null" >
+        opt_content,
+      </if>
+      <if test="clientIp != null" >
+        client_ip,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="command != null" >
+        command,
+      </if>
+      <if test="operationobj != null" >
+        operationobj,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="loginName != null" >
+        #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleName != null" >
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="optContent != null" >
+        #{optContent,jdbcType=VARCHAR},
+      </if>
+      <if test="clientIp != null" >
+        #{clientIp,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="command != null" >
+        #{command,jdbcType=VARCHAR},
+      </if>
+      <if test="operationobj != null" >
+        #{operationobj,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="SysLog" >
+    update syslog
+    <set >
+      <if test="loginName != null" >
+        login_name = #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleName != null" >
+        role_name = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="optContent != null" >
+        opt_content = #{optContent,jdbcType=VARCHAR},
+      </if>
+      <if test="clientIp != null" >
+        client_ip = #{clientIp,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="command != null" >
+        command = #{command,jdbcType=VARCHAR},
+      </if>
+      <if test="operationobj != null" >
+        operationobj = #{operationobj,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="SysLog" >
+    update syslog
+    set login_name = #{loginName,jdbcType=VARCHAR},
+      role_name = #{roleName,jdbcType=VARCHAR},
+      opt_content = #{optContent,jdbcType=VARCHAR},
+      client_ip = #{clientIp,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      command = #{command,jdbcType=VARCHAR},
+      operationobj = #{operationobj,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.net.metadata.mapper.T_airport_dynchuteMapper">
+    <resultMap id="BaseResultMap" type="com.net.metadata.entity.T_airport_dynchute">
+        <id column="ID" property="ID" jdbcType="BIGINT"/>
+        <result column="PLANDATE" property="PLANDATE" jdbcType="VARCHAR"/>
+        <result column="AIRCORP" property="AIRCORP" jdbcType="VARCHAR"/>
+        <result column="FLTNO" property="FLTNO" jdbcType="VARCHAR"/>
+        <result column="FLTATTR" property="FLTATTR" jdbcType="VARCHAR"/>
+        <result column="FLTTYPE" property="FLTTYPE" jdbcType="VARCHAR"/>
+        <result column="CODE" property="CODE" jdbcType="VARCHAR"/>
+        <result column="ATTR" property="ATTR" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="STATUS" jdbcType="VARCHAR"/>
+        <result column="STM" property="STM" jdbcType="TIMESTAMP"/>
+        <result column="ETM" property="ETM" jdbcType="TIMESTAMP"/>
+        <result column="PSTM" property="PSTM" jdbcType="TIMESTAMP"/>
+        <result column="PETM" property="PETM" jdbcType="TIMESTAMP"/>
+        <result column="RSTM" property="RSTM" jdbcType="TIMESTAMP"/>
+        <result column="RETM" property="RETM" jdbcType="TIMESTAMP"/>
+        <result column="TRAINLERCODE" property="TRAINLERCODE" jdbcType="VARCHAR"/>
+        <result column="PERSONCODE" property="PERSONCODE" jdbcType="VARCHAR"/>
+        <result column="REMARTK" property="REMARTK" jdbcType="VARCHAR"/>
+        <result column="BY1" property="by1" jdbcType="VARCHAR"/>
+        <result column="BY2" property="by2" jdbcType="VARCHAR"/>
+        <result column="BY3" property="by3" jdbcType="VARCHAR"/>
+        <result column="BY4" property="by4" jdbcType="VARCHAR"/>
+        <result column="BY5" property="by5" jdbcType="VARCHAR"/>
+        <result column="BY6" property="by6" jdbcType="VARCHAR"/>
+        <result column="BY7" property="by7" jdbcType="VARCHAR"/>
+        <result column="BY8" property="by8" jdbcType="VARCHAR"/>
+        <result column="BY9" property="by9" jdbcType="VARCHAR"/>
+        <result column="BY10" property="by10" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List"> 
+        ID,PLANDATE,AIRCORP, FLTNO,FLTATTR,FLTTYPE,CODE, STATUS, ATTR,STM,ETM,PSTM,PETM,RSTM,RETM,REMARTK,TRAINLERCODE,PERSONCODE, BY1,BY2,BY3,BY4,BY5,BY6,BY7,BY8,BY9,BY10
+    </sql>
+
+    <select id="findT_airport_dynchutePageCondition" resultMap="BaseResultMap" parameterType="PageInfo">
+        SELECT * FROM (
+            SELECT TOP (${from}+${size}) ROW_NUMBER() OVER(ORDER BY ID ASC) AS rowid,
+            <include refid="Base_Column_List"/>
+            from T_airport_dynchute p
+            <where>
+                <if test=" condition.PLANDATE != null and condition.PLANDATE != '' ">
+                    and p.PLANDATE = '${condition.PLANDATE}'
+                </if>
+                <if test=" condition.FLTNO != null and condition.FLTNO != '' ">
+                    and p.FLTNO = '${condition.FLTNO}'
+                </if>
+                <if test=" condition.CODE != null and condition.CODE != '' ">
+                    or p.PLANDATE like '%${condition.CODE}%'
+                    or p.AIRCORP like '%${condition.CODE}%'
+                    or p.FLTNO like '%${condition.CODE}%'
+                    or p.FLTATTR like '%${condition.CODE}%'
+                    or p.FLTTYPE like '%${condition.CODE}%'
+                    or p.CODE like '%${condition.CODE}%'
+                    or p.STATUS like '%${condition.CODE}%'
+                    or p.ATTR like '%${condition.CODE}%'
+                    or p.STM like '%${condition.CODE}%'
+                    or p.ETM like '%${condition.CODE}%'
+                    or p.PSTM like '%${condition.CODE}%'
+                    or p.PETM like '%${condition.CODE}%'
+                    or p.RETM like '%${condition.CODE}%'
+                    or p.RSTM like '%${condition.CODE}%'
+                    or p.REMARTK like '%${condition.CODE}%'
+                    or p.TRAINLERCODE like '%${condition.CODE}%'
+                    or p.PERSONCODE like '%${condition.CODE}%'
+                </if>
+            </where>
+            order by ${sort} ${order}
+        ) AS t WHERE rowid &gt; ${from}
+    </select>
+
+    <select id="findT_airport_dynchutePageCount" resultType="java.lang.Integer" parameterType="PageInfo">
+        select count(*) count
+        from T_airport_dynchute p
+        <where>
+            <if test=" condition.CODE != null and condition.CODE != '' ">
+                or p.PLANDATE like '%${condition.CODE}%'
+                or p.AIRCORP like '%${condition.CODE}%'
+                or p.FLTNO like '%${condition.CODE}%'
+                or p.FLTATTR like '%${condition.CODE}%'
+                or p.FLTTYPE like '%${condition.CODE}%'
+                or p.CODE like '%${condition.CODE}%'
+                or p.STATUS like '%${condition.CODE}%'
+                or p.ATTR like '%${condition.CODE}%'
+                or p.STM like '%${condition.CODE}%'
+                or p.ETM like '%${condition.CODE}%'
+                or p.PSTM like '%${condition.CODE}%'
+                or p.PETM like '%${condition.CODE}%'
+                or p.RETM like '%${condition.CODE}%'
+                or p.RSTM like '%${condition.CODE}%'
+                or p.REMARTK like '%${condition.CODE}%'
+                or p.TRAINLERCODE like '%${condition.CODE}%'
+                or p.PERSONCODE like '%${condition.CODE}%'
+            </if>
+        </where>
+    </select>
+
+    <select id="findT_airport_dynchuteByID" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select  <include refid="Base_Column_List"/>
+        from T_airport_dynchute where id=${id}
+    </select>
+
+
+    <select id="findT_airport_dynchuteByCondition" resultMap="BaseResultMap">
+        select  <include refid="Base_Column_List"/>
+        from T_airport_dynchute
+        <where>
+            <if test="plandate!=null and plandate!=''">
+                and plandate ='${plandate}'
+            </if>
+            <if test="aircorp!=null and aircorp!=''">
+                and aircorp ='${aircorp}'
+            </if>
+            <if test="fltno!=null and fltno!=''">
+                and fltno ='${fltno}'
+            </if>
+            <if test="attr!=null and attr!=''">
+                and attr ='${attr}'
+            </if>
+        </where>
+    </select>
+
+    <update id="updateT_airport_dynchute" parameterType="java.lang.Long">
+   update T_airport_dynchute set by1='装车结束' where id = ${id}
+  </update>
+</mapper>

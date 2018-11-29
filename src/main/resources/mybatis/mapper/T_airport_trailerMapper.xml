@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.net.metadata.mapper.T_airport_trailerMapper">
+    <resultMap id="BaseResultMap" type="com.net.metadata.entity.T_airport_trailer">
+        <id column="ID" property="ID" jdbcType="BIGINT"/>
+        <result column="CODE" property="CODE" jdbcType="VARCHAR"/>
+        <result column="TYPE" property="TYPE" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="STATUS" jdbcType="VARCHAR"/>
+        <result column="REMARK" property="REMARK" jdbcType="VARCHAR"/>
+        <result column="BY1" property="BY1" jdbcType="VARCHAR"/>
+        <result column="BY2" property="BY2" jdbcType="VARCHAR"/>
+        <result column="BY3" property="BY3" jdbcType="VARCHAR"/>
+        <result column="BY4" property="BY4" jdbcType="VARCHAR"/>
+        <result column="BY5" property="BY5" jdbcType="VARCHAR"/>
+        <result column="BY6" property="BY6" jdbcType="VARCHAR"/>
+        <result column="BY7" property="BY7" jdbcType="VARCHAR"/>
+        <result column="BY8" property="BY8" jdbcType="VARCHAR"/>
+        <result column="BY9" property="BY9" jdbcType="VARCHAR"/>
+        <result column="BY10" property="BY10" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List"> 
+        ID, CODE, TYPE, STATUS, REMARK, BY1,BY2,BY3,BY4,BY5,BY6,BY7,BY8,BY9,BY10
+    </sql>
+
+    <select id="findT_airport_trailerPageCondition" resultMap="BaseResultMap" parameterType="PageInfo">
+        SELECT * FROM (
+            SELECT TOP (${from}+${size}) ROW_NUMBER() OVER(ORDER BY ID ASC) AS rowid,
+            <include refid="Base_Column_List"/>
+            FROM T_airport_trailer p
+            <where>
+                <if test=" condition.CODE != null and condition.CODE != '' ">
+                    or p.CODE like '%${condition.CODE}%'
+                    or p.TYPE like '%${condition.CODE}%'
+                    or p.STATUS like '%${condition.CODE}%'
+                    or p.REMARK like '%${condition.CODE}%'
+                </if>
+            </where>
+            order by ${sort} ${order}
+        ) AS t WHERE rowid &gt; ${from}
+    </select>
+
+    <select id="findT_airport_trailerPageCount" resultType="java.lang.Integer" parameterType="PageInfo">
+        select count(*) count
+        from T_airport_trailer p
+        <where>
+            <if test=" condition.CODE != null and condition.CODE != '' ">
+                or p.CODE like '%${condition.CODE}%'
+                or p.TYPE like '%${condition.CODE}%'
+                or p.STATUS like '%${condition.CODE}%'
+                or p.REMARK like '%${condition.CODE}%'
+            </if>
+        </where>
+    </select>
+
+    <select id="findT_airport_trailerAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from T_airport_trailer order by ID
+    </select>
+
+    <select id="findT_airport_trailerById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from T_airport_trailer
+        where ID = #{ID,jdbcType=BIGINT}
+    </select>
+
+    <select id="findT_airport_trailerByCODE" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from T_airport_trailer
+        where CODE = #{CODE,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insert" parameterType="T_airport_trailer">
+        insert into T_airport_trailer (CODE, TYPE, STATUS, REMARK,BY1,BY2,BY3,BY4,BY5,BY6,BY7,BY8,BY9,BY10)
+        values (
+            #{CODE,jdbcType=VARCHAR},
+            #{TYPE,jdbcType=VARCHAR},
+            #{STATUS,jdbcType=VARCHAR},
+            #{REMARK,jdbcType=VARCHAR},
+            #{BY1,jdbcType=VARCHAR},
+            #{BY2,jdbcType=VARCHAR},
+            #{BY3,jdbcType=VARCHAR},
+            #{BY4,jdbcType=VARCHAR},
+            #{BY5,jdbcType=VARCHAR},
+            #{BY6,jdbcType=VARCHAR},
+            #{BY7,jdbcType=VARCHAR},
+            #{BY8,jdbcType=VARCHAR},
+            #{BY9,jdbcType=VARCHAR},
+            #{BY10,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="updateT_airport_trailer" parameterType="T_airport_trailer">
+        update T_airport_trailer
+        <set>
+            <if test="CODE != null">
+                CODE = #{CODE,jdbcType=VARCHAR},
+            </if>
+            <if test="TYPE != null">
+                TYPE = #{TYPE,jdbcType=VARCHAR},
+            </if>
+            <if test="STATUS != null">
+                STATUS = #{STATUS,jdbcType=VARCHAR},
+            </if>
+            <if test="REMARK != null">
+                REMARK = #{REMARK,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{ID,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteT_airport_trailerById" parameterType="java.lang.Long">
+        delete from T_airport_trailer where ID = #{ID,jdbcType=BIGINT}
+    </delete>
+</mapper>

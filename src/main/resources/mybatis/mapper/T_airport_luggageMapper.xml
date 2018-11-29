@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.net.metadata.mapper.T_airport_luggageMapper">
+  <resultMap id="BaseResultMap" type="com.net.metadata.entity.T_airport_luggage">
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PLANDATE" property="plandate" jdbcType="VARCHAR" />
+    <result column="AIRCORP" property="aircorp" jdbcType="VARCHAR" />
+    <result column="FLTNO" property="fltno" jdbcType="VARCHAR" />
+    <result column="PERCODE" property="percode" jdbcType="VARCHAR" />
+    <result column="BGCODE" property="bgcode" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="ATTR" property="attr" jdbcType="VARCHAR" />
+    <result column="BGWEIGHT" property="bgweight" jdbcType="DECIMAL" />
+    <result column="BGPHOTO" property="bgphoto" jdbcType="VARCHAR" />
+    <result column="BGSTATUS" property="bgstatus" jdbcType="VARCHAR" />
+    <result column="TRAILERCODE" property="trailercode" jdbcType="VARCHAR" />
+    <result column="PERSONCODE" property="personcode" jdbcType="VARCHAR" />
+    <result column="CHUTECODE" property="chutecode" jdbcType="VARCHAR" />
+    <result column="TRAILER_TIME" property="trailerTime" jdbcType="DATE" />
+    <result column="OUT_TIME" property="outTime" jdbcType="DATE" />
+    <result column="IN_CABIN_TIME" property="inCabinTime" jdbcType="DATE" />
+    <result column="IN_CABIN_EMPLOYEE_ID" property="inCabinEmployeeId" jdbcType="VARCHAR" />
+    <result column="CATION_AREA" property="cationArea" jdbcType="VARCHAR" />
+    <result column="OUT_CABIN_TIME" property="outCabinTime" jdbcType="DATE" />
+    <result column="OUT_CABIN_EMPLOYEE_ID" property="outCabinEmployeeId" jdbcType="VARCHAR" />
+    <result column="BGLEVEL" property="bglevel" jdbcType="VARCHAR" />
+    <result column="CHKDESK" property="chkdesk" jdbcType="VARCHAR" />
+    <result column="IN_CHK_TIME" property="inChkTime" jdbcType="DATE" />
+    <result column="REMARTK" property="remartk" jdbcType="VARCHAR" />
+    <result column="BY1" property="by1" jdbcType="VARCHAR" />
+    <result column="BY2" property="by2" jdbcType="VARCHAR" />
+    <result column="BY3" property="by3" jdbcType="VARCHAR" />
+    <result column="BY4" property="by4" jdbcType="VARCHAR" />
+    <result column="BY5" property="by5" jdbcType="VARCHAR" />
+    <result column="BY6" property="by6" jdbcType="VARCHAR" />
+    <result column="BY7" property="by7" jdbcType="VARCHAR" />
+    <result column="BY8" property="by8" jdbcType="VARCHAR" />
+    <result column="BY9" property="by9" jdbcType="VARCHAR" />
+    <result column="BY10" property="by10" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    ID, PLANDATE, AIRCORP, FLTNO, PERCODE, BGCODE, TYPE, ATTR, BGWEIGHT, BGPHOTO, BGSTATUS, 
+    TRAILERCODE, PERSONCODE, CHUTECODE, TRAILER_TIME, OUT_TIME, IN_CABIN_TIME, IN_CABIN_EMPLOYEE_ID, 
+    CATION_AREA, OUT_CABIN_TIME, OUT_CABIN_EMPLOYEE_ID, BGLEVEL, CHKDESK, IN_CHK_TIME, 
+    REMARTK, BY1, BY2, BY3, BY4, BY5, BY6, BY7, BY8, BY9, BY10
+  </sql>
+
+
+  <select id="findTPageCondition" resultMap="BaseResultMap" parameterType="PageInfo">
+    SELECT * FROM (
+      SELECT TOP (${from}+${size}) ROW_NUMBER() OVER(ORDER BY ID ASC) AS rowid,
+      <include refid="Base_Column_List"/>
+      FROM T_airport_luggage p
+      <where>
+        <if test=" condition.fltno != null and condition.fltno != '' ">
+          p.fltno = #{condition.fltno}
+        </if>
+        <if test=" condition.remark != null and condition.remark != '' ">
+          or p.aircorp like '%${condition.remark}%'
+          or p.fltno like '%${condition.remark}%'
+          or p.percode like '%${condition.remark}%'
+          or p.bgcode like '%${condition.remark}%'
+          or p.trailercode like '%${condition.remark}%'
+          or p.personcode like '%${condition.remark}%'
+          or p.chutecode like '%${condition.remark}%'
+        </if>
+      </where>
+      order by plandate,aircorp,fltno,trailercode,chutecode
+    ) AS t WHERE rowid &gt; ${from}
+  </select>
+
+  <select id="findPageCount" resultType="java.lang.Integer" parameterType="PageInfo">
+    select count(*) count
+    from T_airport_luggage p
+    <where>
+      <if test=" condition.fltno != null and condition.fltno != '' ">
+        p.fltno = #{condition.fltno}
+      </if>
+      <if test=" condition.remark != null and condition.remark != '' ">
+        or p.aircorp like '%${condition.remark}%'
+        or p.fltno like '%${condition.remark}%'
+        or p.percode like '%${condition.remark}%'
+        or p.bgcode like '%${condition.remark}%'
+        or p.trailercode like '%${condition.remark}%'
+        or p.personcode like '%${condition.remark}%'
+        or p.chutecode like '%${condition.remark}%'
+      </if>
+    </where>
+  </select>
+
+  <select id="findByBgcode" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from T_AIRPORT_LUGGAGE
+    where BGCODE=#{bgcode,jdbcType=VARCHAR} and bgstatus&lt;&gt;'已删除'
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from T_AIRPORT_LUGGAGE
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+  <select id="findT_airport_luggageAll" resultType="java.lang.Integer" >
+    select count(*) count from T_AIRPORT_LUGGAGE
+  </select>
+
+  <select id="findT_airport_luggageAllbytime" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select count(*) From T_AIRPORT_LUGGAGE where #{ti,jdbcType=VARCHAR}=Datename(hour,IN_CHK_TIME)
+  </select>
+
+  <select id="findT_airport_luggageAllbystutas" resultType="java.lang.Integer" >
+    select count(*) count from T_AIRPORT_LUGGAGE where BGSTATUS='装车'
+  </select>
+
+  <select id="findT_airport_luggageAllbystutastime" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select count(*) From T_AIRPORT_LUGGAGE where #{ti,jdbcType=VARCHAR}=Datename(hour,IN_CHK_TIME) and BGSTATUS='装车'
+  </select>
+
+  <select id="findT_airport_luggageAllbystutasw" resultType="java.lang.Integer" >
+    select count(*) count from T_AIRPORT_LUGGAGE where BGSTATUS is null
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    update T_AIRPORT_LUGGAGE set bgstatus = '已删除' where ID = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="T_airport_luggage" >
+    insert into T_AIRPORT_LUGGAGE (PLANDATE, AIRCORP,
+      FLTNO, PERCODE, BGCODE,
+      TYPE, ATTR, BGWEIGHT,
+      BGPHOTO, BGSTATUS, TRAILERCODE,
+      PERSONCODE, CHUTECODE, TRAILER_TIME,
+      OUT_TIME, IN_CABIN_TIME, IN_CABIN_EMPLOYEE_ID,
+      CATION_AREA, OUT_CABIN_TIME, OUT_CABIN_EMPLOYEE_ID,
+      BGLEVEL, CHKDESK, IN_CHK_TIME,
+      REMARTK, BY1, BY2,
+      BY3, BY4, BY5, BY6,
+      BY7, BY8, BY9, BY10
+    )
+    values (#{plandate,jdbcType=VARCHAR}, #{aircorp,jdbcType=VARCHAR},
+      #{fltno,jdbcType=VARCHAR}, #{percode,jdbcType=VARCHAR}, #{bgcode,jdbcType=VARCHAR},
+      #{type,jdbcType=VARCHAR}, #{attr,jdbcType=VARCHAR}, #{bgweight,jdbcType=DECIMAL},
+      #{bgphoto,jdbcType=VARCHAR}, #{bgstatus,jdbcType=VARCHAR}, #{trailercode,jdbcType=VARCHAR},
+      #{personcode,jdbcType=VARCHAR}, #{chutecode,jdbcType=VARCHAR}, #{trailerTime,jdbcType=DATE},
+      #{outTime,jdbcType=DATE}, #{inCabinTime,jdbcType=DATE}, #{inCabinEmployeeId,jdbcType=VARCHAR},
+      #{cationArea,jdbcType=VARCHAR}, #{outCabinTime,jdbcType=DATE}, #{outCabinEmployeeId,jdbcType=VARCHAR},
+      #{bglevel,jdbcType=VARCHAR}, #{chkdesk,jdbcType=VARCHAR}, #{inChkTime,jdbcType=DATE},
+      #{remartk,jdbcType=VARCHAR}, #{by1,jdbcType=VARCHAR}, #{by2,jdbcType=VARCHAR},
+      #{by3,jdbcType=VARCHAR}, #{by4,jdbcType=VARCHAR}, #{by5,jdbcType=VARCHAR}, #{by6,jdbcType=VARCHAR},
+      #{by7,jdbcType=VARCHAR}, #{by8,jdbcType=VARCHAR}, #{by9,jdbcType=VARCHAR}, #{by10,jdbcType=VARCHAR}
+    )
+  </insert>
+
+  <insert id="insertSelective" parameterType="T_airport_luggage" >
+    insert into T_AIRPORT_LUGGAGE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="plandate != null" >
+        PLANDATE,
+      </if>
+      <if test="aircorp != null" >
+        AIRCORP,
+      </if>
+      <if test="fltno != null" >
+        FLTNO,
+      </if>
+      <if test="percode != null" >
+        PERCODE,
+      </if>
+      <if test="bgcode != null" >
+        BGCODE,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="attr != null" >
+        ATTR,
+      </if>
+      <if test="bgweight != null" >
+        BGWEIGHT,
+      </if>
+      <if test="bgphoto != null" >
+        BGPHOTO,
+      </if>
+      <if test="bgstatus != null" >
+        BGSTATUS,
+      </if>
+      <if test="trailercode != null" >
+        TRAILERCODE,
+      </if>
+      <if test="personcode != null" >
+        PERSONCODE,
+      </if>
+      <if test="chutecode != null" >
+        CHUTECODE,
+      </if>
+      <if test="trailerTime != null" >
+        TRAILER_TIME,
+      </if>
+      <if test="outTime != null" >
+        OUT_TIME,
+      </if>
+      <if test="inCabinTime != null" >
+        IN_CABIN_TIME,
+      </if>
+      <if test="inCabinEmployeeId != null" >
+        IN_CABIN_EMPLOYEE_ID,
+      </if>
+      <if test="cationArea != null" >
+        CATION_AREA,
+      </if>
+      <if test="outCabinTime != null" >
+        OUT_CABIN_TIME,
+      </if>
+      <if test="outCabinEmployeeId != null" >
+        OUT_CABIN_EMPLOYEE_ID,
+      </if>
+      <if test="bglevel != null" >
+        BGLEVEL,
+      </if>
+      <if test="chkdesk != null" >
+        CHKDESK,
+      </if>
+      <if test="inChkTime != null" >
+        IN_CHK_TIME,
+      </if>
+      <if test="remartk != null" >
+        REMARTK,
+      </if>
+      <if test="by1 != null" >
+        BY1,
+      </if>
+      <if test="by2 != null" >
+        BY2,
+      </if>
+      <if test="by3 != null" >
+        BY3,
+      </if>
+      <if test="by4 != null" >
+        BY4,
+      </if>
+      <if test="by5 != null" >
+        BY5,
+      </if>
+      <if test="by6 != null" >
+        BY6,
+      </if>
+      <if test="by7 != null" >
+        BY7,
+      </if>
+      <if test="by8 != null" >
+        BY8,
+      </if>
+      <if test="by9 != null" >
+        BY9,
+      </if>
+      <if test="by10 != null" >
+        BY10,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="plandate != null" >
+        #{plandate,jdbcType=VARCHAR},
+      </if>
+      <if test="aircorp != null" >
+        #{aircorp,jdbcType=VARCHAR},
+      </if>
+      <if test="fltno != null" >
+        #{fltno,jdbcType=VARCHAR},
+      </if>
+      <if test="percode != null" >
+        #{percode,jdbcType=VARCHAR},
+      </if>
+      <if test="bgcode != null" >
+        #{bgcode,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="attr != null" >
+        #{attr,jdbcType=VARCHAR},
+      </if>
+      <if test="bgweight != null" >
+        #{bgweight,jdbcType=DECIMAL},
+      </if>
+      <if test="bgphoto != null" >
+        #{bgphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="bgstatus != null" >
+        #{bgstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="trailercode != null" >
+        #{trailercode,jdbcType=VARCHAR},
+      </if>
+      <if test="personcode != null" >
+        #{personcode,jdbcType=VARCHAR},
+      </if>
+      <if test="chutecode != null" >
+        #{chutecode,jdbcType=VARCHAR},
+      </if>
+      <if test="trailerTime != null" >
+        #{trailerTime,jdbcType=DATE},
+      </if>
+      <if test="outTime != null" >
+        #{outTime,jdbcType=DATE},
+      </if>
+      <if test="inCabinTime != null" >
+        #{inCabinTime,jdbcType=DATE},
+      </if>
+      <if test="inCabinEmployeeId != null" >
+        #{inCabinEmployeeId,jdbcType=VARCHAR},
+      </if>
+      <if test="cationArea != null" >
+        #{cationArea,jdbcType=VARCHAR},
+      </if>
+      <if test="outCabinTime != null" >
+        #{outCabinTime,jdbcType=DATE},
+      </if>
+      <if test="outCabinEmployeeId != null" >
+        #{outCabinEmployeeId,jdbcType=VARCHAR},
+      </if>
+      <if test="bglevel != null" >
+        #{bglevel,jdbcType=VARCHAR},
+      </if>
+      <if test="chkdesk != null" >
+        #{chkdesk,jdbcType=VARCHAR},
+      </if>
+      <if test="inChkTime != null" >
+        #{inChkTime,jdbcType=DATE},
+      </if>
+      <if test="remartk != null" >
+        #{remartk,jdbcType=VARCHAR},
+      </if>
+      <if test="by1 != null" >
+        #{by1,jdbcType=VARCHAR},
+      </if>
+      <if test="by2 != null" >
+        #{by2,jdbcType=VARCHAR},
+      </if>
+      <if test="by3 != null" >
+        #{by3,jdbcType=VARCHAR},
+      </if>
+      <if test="by4 != null" >
+        #{by4,jdbcType=VARCHAR},
+      </if>
+      <if test="by5 != null" >
+        #{by5,jdbcType=VARCHAR},
+      </if>
+      <if test="by6 != null" >
+        #{by6,jdbcType=VARCHAR},
+      </if>
+      <if test="by7 != null" >
+        #{by7,jdbcType=VARCHAR},
+      </if>
+      <if test="by8 != null" >
+        #{by8,jdbcType=VARCHAR},
+      </if>
+      <if test="by9 != null" >
+        #{by9,jdbcType=VARCHAR},
+      </if>
+      <if test="by10 != null" >
+        #{by10,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="T_airport_luggage" >
+    update T_AIRPORT_LUGGAGE
+    <set >
+      <if test="plandate != null" >
+        PLANDATE = #{plandate,jdbcType=VARCHAR},
+      </if>
+      <if test="aircorp != null" >
+        AIRCORP = #{aircorp,jdbcType=VARCHAR},
+      </if>
+      <if test="fltno != null" >
+        FLTNO = #{fltno,jdbcType=VARCHAR},
+      </if>
+      <if test="percode != null" >
+        PERCODE = #{percode,jdbcType=VARCHAR},
+      </if>
+      <if test="bgcode != null" >
+        BGCODE = #{bgcode,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="attr != null" >
+        ATTR = #{attr,jdbcType=VARCHAR},
+      </if>
+      <if test="bgweight != null" >
+        BGWEIGHT = #{bgweight,jdbcType=DECIMAL},
+      </if>
+      <if test="bgphoto != null" >
+        BGPHOTO = #{bgphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="bgstatus != null" >
+        BGSTATUS = #{bgstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="trailercode != null" >
+        TRAILERCODE = #{trailercode,jdbcType=VARCHAR},
+      </if>
+      <if test="personcode != null" >
+        PERSONCODE = #{personcode,jdbcType=VARCHAR},
+      </if>
+      <if test="chutecode != null" >
+        CHUTECODE = #{chutecode,jdbcType=VARCHAR},
+      </if>
+      <if test="trailerTime != null" >
+        TRAILER_TIME = #{trailerTime,jdbcType=DATE},
+      </if>
+      <if test="outTime != null" >
+        OUT_TIME = #{outTime,jdbcType=DATE},
+      </if>
+      <if test="inCabinTime != null" >
+        IN_CABIN_TIME = #{inCabinTime,jdbcType=DATE},
+      </if>
+      <if test="inCabinEmployeeId != null" >
+        IN_CABIN_EMPLOYEE_ID = #{inCabinEmployeeId,jdbcType=VARCHAR},
+      </if>
+      <if test="cationArea != null" >
+        CATION_AREA = #{cationArea,jdbcType=VARCHAR},
+      </if>
+      <if test="outCabinTime != null" >
+        OUT_CABIN_TIME = #{outCabinTime,jdbcType=DATE},
+      </if>
+      <if test="outCabinEmployeeId != null" >
+        OUT_CABIN_EMPLOYEE_ID = #{outCabinEmployeeId,jdbcType=VARCHAR},
+      </if>
+      <if test="bglevel != null" >
+        BGLEVEL = #{bglevel,jdbcType=VARCHAR},
+      </if>
+      <if test="chkdesk != null" >
+        CHKDESK = #{chkdesk,jdbcType=VARCHAR},
+      </if>
+      <if test="inChkTime != null" >
+        IN_CHK_TIME = #{inChkTime,jdbcType=DATE},
+      </if>
+      <if test="remartk != null" >
+        REMARTK = #{remartk,jdbcType=VARCHAR},
+      </if>
+      <if test="by1 != null" >
+        BY1 = #{by1,jdbcType=VARCHAR},
+      </if>
+      <if test="by2 != null" >
+        BY2 = #{by2,jdbcType=VARCHAR},
+      </if>
+      <if test="by3 != null" >
+        BY3 = #{by3,jdbcType=VARCHAR},
+      </if>
+      <if test="by4 != null" >
+        BY4 = #{by4,jdbcType=VARCHAR},
+      </if>
+      <if test="by5 != null" >
+        BY5 = #{by5,jdbcType=VARCHAR},
+      </if>
+      <if test="by6 != null" >
+        BY6 = #{by6,jdbcType=VARCHAR},
+      </if>
+      <if test="by7 != null" >
+        BY7 = #{by7,jdbcType=VARCHAR},
+      </if>
+      <if test="by8 != null" >
+        BY8 = #{by8,jdbcType=VARCHAR},
+      </if>
+      <if test="by9 != null" >
+        BY9 = #{by9,jdbcType=VARCHAR},
+      </if>
+      <if test="by10 != null" >
+        BY10 = #{by10,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="T_airport_luggage" >
+    update T_AIRPORT_LUGGAGE
+    set PLANDATE = #{plandate,jdbcType=VARCHAR},
+      AIRCORP = #{aircorp,jdbcType=VARCHAR},
+      FLTNO = #{fltno,jdbcType=VARCHAR},
+      PERCODE = #{percode,jdbcType=VARCHAR},
+      BGCODE = #{bgcode,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=VARCHAR},
+      ATTR = #{attr,jdbcType=VARCHAR},
+      BGWEIGHT = #{bgweight,jdbcType=DECIMAL},
+      BGPHOTO = #{bgphoto,jdbcType=VARCHAR},
+      BGSTATUS = #{bgstatus,jdbcType=VARCHAR},
+      TRAILERCODE = #{trailercode,jdbcType=VARCHAR},
+      PERSONCODE = #{personcode,jdbcType=VARCHAR},
+      CHUTECODE = #{chutecode,jdbcType=VARCHAR},
+      TRAILER_TIME = #{trailerTime,jdbcType=DATE},
+      OUT_TIME = #{outTime,jdbcType=DATE},
+      IN_CABIN_TIME = #{inCabinTime,jdbcType=DATE},
+      IN_CABIN_EMPLOYEE_ID = #{inCabinEmployeeId,jdbcType=VARCHAR},
+      CATION_AREA = #{cationArea,jdbcType=VARCHAR},
+      OUT_CABIN_TIME = #{outCabinTime,jdbcType=DATE},
+      OUT_CABIN_EMPLOYEE_ID = #{outCabinEmployeeId,jdbcType=VARCHAR},
+      BGLEVEL = #{bglevel,jdbcType=VARCHAR},
+      CHKDESK = #{chkdesk,jdbcType=VARCHAR},
+      IN_CHK_TIME = #{inChkTime,jdbcType=DATE},
+      REMARTK = #{remartk,jdbcType=VARCHAR},
+      BY1 = #{by1,jdbcType=VARCHAR},
+      BY2 = #{by2,jdbcType=VARCHAR},
+      BY3 = #{by3,jdbcType=VARCHAR},
+      BY4 = #{by4,jdbcType=VARCHAR},
+      BY5 = #{by5,jdbcType=VARCHAR},
+      BY6 = #{by6,jdbcType=VARCHAR},
+      BY7 = #{by7,jdbcType=VARCHAR},
+      BY8 = #{by8,jdbcType=VARCHAR},
+      BY9 = #{by9,jdbcType=VARCHAR},
+      BY10 = #{by10,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.net.metadata.mapper.InitFltBagsMapper">
+    <resultMap id="BaseResultMap" type="com.net.metadata.entity.InitFltBags">
+        <result column="plandate" property="plandate" jdbcType="VARCHAR"/>
+        <result column="aircorp" property="aircorp" jdbcType="VARCHAR"/>
+        <result column="fltno" property="fltno" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="stm" property="stm" jdbcType="TIMESTAMP"/>
+        <result column="etm" property="etm" jdbcType="TIMESTAMP"/>
+        <result column="pstm" property="pstm" jdbcType="TIMESTAMP"/>
+        <result column="petm" property="petm" jdbcType="TIMESTAMP"/>
+        <result column="rstm" property="rstm" jdbcType="TIMESTAMP"/>
+        <result column="retm" property="retm" jdbcType="TIMESTAMP"/>
+        <result column="trainlercode" property="trainlercode" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="ip" property="ip" jdbcType="VARCHAR"/>
+        <result column="total" property="total" jdbcType="INTEGER"/>
+        <result column="vipbags" property="vipbags" jdbcType="INTEGER"/>
+        <result column="zcbags" property="zcbags" jdbcType="INTEGER"/>
+        <result column="wsbbags" property="wsbbags" jdbcType="INTEGER"/>
+        <result column="sjajbags" property="sjajbags" jdbcType="INTEGER"/>
+        <result column="bigbags" property="bigbags" jdbcType="INTEGER"/>
+        <result column="arrp" property="arrp" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        plandate, aircorp, fltno, code,status,stm,etm,pstm,petm,rstm,retm,trainlercode,name,ip,total,
+        vipbags,zcbags,wsbbags,sjajbags,bigbags,arrp
+    </sql>
+
+    <select id="findInit" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from bids_init_view where ip ='${ip}' and plandate = convert(char(10),GetDate(),120)
+        and (status='待机' or status='开放' or status is null or status ='空闲') order by stm
+    </select>
+
+
+    <select id="findCounts" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bids_init_view
+        where
+            plandate='${plandate}' and
+            aircorp ='${aircorp}' and
+            fltno ='${fltno}' and
+            code = '${code}'
+        order by stm
+    </select>
+</mapper>

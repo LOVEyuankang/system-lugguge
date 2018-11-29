@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.net.metadata.mapper.T_airport_passengerMapper">
+    <resultMap id="BaseResultMap" type="com.net.metadata.entity.T_airport_passenger">
+        <id column="ID" property="ID" jdbcType="BIGINT"/>
+        <result column="PLANDATE" property="PLANDATE" jdbcType="VARCHAR"/>
+        <result column="AIRCORP" property="AIRCORP" jdbcType="VARCHAR"/>
+        <result column="FLTNO" property="FLTNO" jdbcType="VARCHAR"/>
+        <result column="CODE" property="CODE" jdbcType="VARCHAR"/>
+        <result column="NAME" property="NAME" jdbcType="VARCHAR"/>
+        <result column="CW" property="CW" jdbcType="VARCHAR"/>
+        <result column="CHKNUM" property="CHKNUM" jdbcType="BIGINT"/>
+        <result column="CHKTM" property="CHKTM" jdbcType="TIMESTAMP"/>
+        <result column="REMARTK" property="REMARTK" jdbcType="VARCHAR"/>
+        <!--<result column="BY1" property="BY1" jdbcType="VARCHAR"/>-->
+        <!--<result column="BY2" property="BY2" jdbcType="VARCHAR"/>-->
+        <!--<result column="BY3" property="BY3" jdbcType="VARCHAR"/>-->
+        <!--<result column="BY4" property="BY4" jdbcType="VARCHAR"/>-->
+        <!--<result column="BY5" property="BY5" jdbcType="VARCHAR"/>-->
+        <!--<result column="BY6" property="BY6" jdbcType="VARCHAR"/>-->
+        <!--<result column="BY7" property="BY7" jdbcType="VARCHAR"/>-->
+        <!--<result column="BY8" property="BY8" jdbcType="VARCHAR"/>-->
+        <!--<result column="BY9" property="BY9" jdbcType="VARCHAR"/>-->
+        <!--<result column="BY10" property="BY10" jdbcType="VARCHAR"/>-->
+    </resultMap>
+
+    <!--<sql id="Base_Column_List"> -->
+     <!--ID,PLANDATE,AIRCORP, FLTNO,CODE, NAME, CW,CHKNUM,CHKTM,REMARTK, BY1,BY2,BY3,BY4,BY5,BY6,BY7,BY8,BY9,BY10-->
+   <!--</sql>-->
+
+    <sql id="Base_Column_List">
+        ID,PLANDATE,AIRCORP, FLTNO,CODE, NAME, CW,CHKNUM,CHKTM,REMARTK
+    </sql>
+
+    <select id="findT_airport_passengerPageCondition" resultMap="BaseResultMap" parameterType="PageInfo">
+        SELECT * FROM (
+            SELECT TOP (${from}+${size}) ROW_NUMBER() OVER(ORDER BY ID ASC) AS rowid,
+            <include refid="Base_Column_List"/>
+            FROM T_airport_passenger p
+            <where>
+                <if test=" condition.CODE != null and condition.CODE != '' ">
+                    or p.PLANDATE like '%${condition.CODE}%'
+                    or p.AIRCORP like '%${condition.CODE}%'
+                    or p.FLTNO like '%${condition.CODE}%'
+                    or p.CODE like '%${condition.CODE}%'
+                    or p.NAME like '%${condition.CODE}%'
+                    or p.CW like '%${condition.CODE}%'
+                    or p.CHKNUM like '%${condition.CODE}%'
+                    or p.CHKTM like '%${condition.CODE}%'
+                    or p.REMARTK like '%${condition.CODE}%'
+                </if>
+            </where>
+            order by ${sort} ${order}
+        ) AS t WHERE rowid &gt; ${from}
+    </select>
+
+    <select id="findT_airport_passengerPageCount" resultType="java.lang.Integer" parameterType="PageInfo">
+        select count(*) count
+        from T_airport_passenger p
+        <where>
+            <if test=" condition.CODE != null and condition.CODE != '' ">
+                or p.PLANDATE like '%${condition.CODE}%'
+                or p.AIRCORP like '%${condition.CODE}%'
+                or p.FLTNO like '%${condition.CODE}%'
+                or p.CODE like '%${condition.CODE}%'
+                or p.NAME like '%${condition.CODE}%'
+                or p.CW like '%${condition.CODE}%'
+                or p.CHKNUM like '%${condition.CODE}%'
+                or p.CHKTM like '%${condition.CODE}%'
+                or p.REMARTK like '%${condition.CODE}%'
+           </if>
+        </where>
+  </select>
+    
+</mapper>

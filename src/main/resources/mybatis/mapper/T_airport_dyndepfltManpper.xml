@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.net.metadata.mapper.T_airport_dyndepfltMapper">
+    <resultMap id="BaseResultMap" type="com.net.metadata.entity.T_airport_dyndepflt">
+        <id column="ID" property="ID" jdbcType="BIGINT"/>
+        <result column="PLANDATE" property="PLANDATE" jdbcType="VARCHAR"/>
+        <result column="AIRCORP" property="AIRCORP" jdbcType="VARCHAR"/>
+        <result column="FLTNO" property="FLTNO" jdbcType="VARCHAR"/>
+        <result column="FSTATUS" property="FSTATUS" jdbcType="VARCHAR"/>
+        <result column="PLANENO" property="PLANENO" jdbcType="VARCHAR"/>
+        <result column="PLANEMDL" property="PLANEMDL" jdbcType="VARCHAR"/>
+        <result column="PORTNO" property="PORTNO" jdbcType="VARCHAR"/>
+        <result column="FLTATTR" property="FLTATTR" jdbcType="VARCHAR"/>
+        <result column="FLTTYPE" property="FLTTYPE" jdbcType="VARCHAR"/>
+        <result column="TKFP" property="TKFP" jdbcType="VARCHAR"/>
+        <result column="PASS1" property="PASS1" jdbcType="VARCHAR"/>
+        <result column="PASS2" property="PASS2" jdbcType="VARCHAR"/>
+        <result column="ARRP" property="ARRP" jdbcType="VARCHAR"/>
+        <result column="TKFTM" property="TKFTM" jdbcType="TIMESTAMP"/>
+        <result column="ARRTM" property="ARRTM" jdbcType="TIMESTAMP"/>
+        <result column="PTKFTM" property="PTKFTM" jdbcType="TIMESTAMP"/>
+        <result column="PARRTM" property="PARRTM" jdbcType="TIMESTAMP"/>
+        <result column="RTKFTM" property="RTKFTM" jdbcType="TIMESTAMP"/>
+        <result column="RARRTM" property="RARRTM" jdbcType="TIMESTAMP"/>
+        <result column="BUILD" property="BUILD" jdbcType="VARCHAR"/>
+        <result column="REMARTK" property="REMARTK" jdbcType="VARCHAR"/>
+        <result column="by1" property="by1" jdbcType="VARCHAR"/>
+        <result column="by2" property="by2" jdbcType="VARCHAR"/>
+        <result column="by3" property="by3" jdbcType="VARCHAR"/>
+        <result column="by4" property="by4" jdbcType="VARCHAR"/>
+        <result column="by5" property="by5" jdbcType="VARCHAR"/>
+        <result column="by6" property="by6" jdbcType="VARCHAR"/>
+        <result column="by7" property="by7" jdbcType="VARCHAR"/>
+        <result column="by8" property="by8" jdbcType="VARCHAR"/>
+        <result column="by9" property="by9" jdbcType="VARCHAR"/>
+        <result column="by10" property="by10" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List"> 
+        ID,PLANDATE,AIRCORP, FLTNO,FSTATUS,PLANENO,PLANEMDL,PORTNO,FLTATTR,FLTTYPE,TKFP, PASS1, PASS2,ARRP,TKFTM,ARRTM,PTKFTM,PARRTM,RTKFTM,RARRTM,BUILD,REMARTK, BY1,BY2,BY3,BY4,BY5,BY6,BY7,BY8,BY9,BY10
+    </sql>
+
+    <select id="findT_airport_dyndepfltPageCondition" resultMap="BaseResultMap" parameterType="PageInfo">
+        SELECT * FROM (
+            SELECT TOP (${from}+${size}) ROW_NUMBER() OVER(ORDER BY ID ASC) AS rowid,
+            <include refid="Base_Column_List"/>
+            from T_airport_dyndepflt p
+            <where>
+                <if test=" condition.FLTNO != null and condition.FLTNO != '' ">
+                    or p.PLANDATE like '%${condition.FLTNO}%'
+                    or p.AIRCORP like '%${condition.FLTNO}%'
+                    or p.FLTNO like '%${condition.FLTNO}%'
+                    or p.FSTATUS like '%${condition.FLTNO}%'
+                    or p.PLANENO like '%${condition.FLTNO}%'
+                    or p.PLANEMDL like '%${condition.FLTNO}%'
+                    or p.PORTNO like '%${condition.FLTNO}%'
+                    or p.FLTATTR like '%${condition.FLTNO}%'
+                    or p.FLTTYPE like '%${condition.FLTNO}%'
+                    or p.TKFP like '%${condition.FLTNO}%'
+                    or p.PASS1 like '%${condition.FLTNO}%'
+                    or p.PASS2 like '%${condition.FLTNO}%'
+                    or p.ARRP like '%${condition.FLTNO}%'
+                    or p.TKFTM like '%${condition.FLTNO}%'
+                    or p.ARRTM like '%${condition.FLTNO}%'
+                    or p.PTKFTM like '%${condition.FLTNO}%'
+                    or p.PARRTM like '%${condition.FLTNO}%'
+                    or p.RTKFTM like '%${condition.FLTNO}%'
+                    or p.RARRTM like '%${condition.FLTNO}%'
+                    or p.BUILD like '%${condition.FLTNO}%'
+                    or p.REMARTK like '%${condition.FLTNO}%'
+                </if>
+            </where>
+            order by ${sort} ${order}
+        ) AS t WHERE rowid &gt; ${from}
+    </select>
+
+    <select id="findT_airport_dyndepfltPageCount" resultType="java.lang.Integer" parameterType="PageInfo">
+        select count(*) count
+        from T_airport_dyndepflt p
+        <where>
+            <if test=" condition.FLTNO != null and condition.FLTNO != '' ">
+                or p.PLANDATE like '%${condition.FLTNO}%'
+                or p.AIRCORP like '%${condition.FLTNO}%'
+                or p.FLTNO like '%${condition.FLTNO}%'
+                or p.FSTATUS like '%${condition.FLTNO}%'
+                or p.PLANENO like '%${condition.FLTNO}%'
+                or p.PLANEMDL like '%${condition.FLTNO}%'
+                or p.PORTNO like '%${condition.FLTNO}%'
+                or p.FLTATTR like '%${condition.FLTNO}%'
+                or p.FLTTYPE like '%${condition.FLTNO}%'
+                or p.TKFP like '%${condition.FLTNO}%'
+                or p.PASS1 like '%${condition.FLTNO}%'
+                or p.PASS2 like '%${condition.FLTNO}%'
+                or p.ARRP like '%${condition.FLTNO}%'
+                or p.TKFTM like '%${condition.FLTNO}%'
+                or p.ARRTM like '%${condition.FLTNO}%'
+                or p.PTKFTM like '%${condition.FLTNO}%'
+                or p.PARRTM like '%${condition.FLTNO}%'
+                or p.RTKFTM like '%${condition.FLTNO}%'
+                or p.RARRTM like '%${condition.FLTNO}%'
+                or p.BUILD like '%${condition.FLTNO}%'
+                or p.REMARTK like '%${condition.FLTNO}%'
+            </if>
+        </where>
+    </select>
+
+    <select id="findT_airport_dyndepfltAll" resultType="java.lang.Integer" >
+        select count(*) count from T_airport_dyndepflt
+    </select>
+
+    <select id="findT_airport_dyndepfltAllbytime" resultType="java.lang.Integer" parameterType="java.lang.String" >
+        select count(*) From t_airport_dyndepflt where #{ti,jdbcType=VARCHAR}=Datename(hour,TKFTM)
+    </select>
+
+    <select id="findT_airport_dyndepfltAllbyStatus" resultType="java.lang.Integer" >
+        select count(*) count from T_airport_dyndepflt where FSTATUS='已起飞'
+    </select>
+
+    <select id="findT_airport_dyndepfltAllbyStatusbytime" resultType="java.lang.Integer" parameterType="java.lang.String" >
+        select count(*) count from T_airport_dyndepflt where #{tim,jdbcType=VARCHAR}=Datename(hour,TKFTM) and FSTATUS='已起飞'
+   </select>
+
+</mapper>

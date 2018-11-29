@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.net.metadata.mapper.ChutesMapper">
+    <resultMap id="BaseResultMap" type="com.net.metadata.entity.Chute">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="ccode" property="ccode" jdbcType="VARCHAR"/>
+        <result column="ctype" property="ctype" jdbcType="VARCHAR"/>
+        <result column="cstatus" property="cstatus" jdbcType="VARCHAR"/>
+        <result column="dcode" property="dcode" jdbcType="VARCHAR"/>
+        <result column="dtype" property="dtype" jdbcType="VARCHAR"/>
+        <result column="dstatus" property="dstatus" jdbcType="VARCHAR"/>
+        <result column="ip" property="ip" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+      id, ccode, ctype, cstatus,dcode,dtype,dstatus,ip
+    </sql>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bids_chute_view where dtype ='航显工控机'
+    </select>
+    
+    <select id="findByCode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bids_chute_view where ccode ='${code}' and dtype='航显工控机'
+    </select>
+    
+</mapper>

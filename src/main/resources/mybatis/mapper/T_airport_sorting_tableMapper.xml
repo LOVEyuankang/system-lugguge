@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.net.metadata.mapper.T_airport_sorting_tableMapper">
+    <resultMap id="BaseResultMap" type="com.net.metadata.entity.T_airport_sorting_table">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="SORTINGTABLEID" property="sortingtableid" jdbcType="VARCHAR"/>
+        <result column="SORTINGTABLESTATUSBAR" property="sortingtablestatusbar" jdbcType="VARCHAR"/>
+        <result column="SORTINGTABLEPROPERTIES" property="sortingtableproperties" jdbcType="VARCHAR"/>
+        <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+        <result column="BY1" property="by1" jdbcType="VARCHAR"/>
+        <result column="BY2" property="by2" jdbcType="VARCHAR"/>
+        <result column="BY3" property="by3" jdbcType="VARCHAR"/>
+        <result column="BY4" property="by4" jdbcType="VARCHAR"/>
+        <result column="BY5" property="by5" jdbcType="VARCHAR"/>
+        <result column="BY6" property="by6" jdbcType="VARCHAR"/>
+        <result column="BY7" property="by7" jdbcType="VARCHAR"/>
+        <result column="BY8" property="by8" jdbcType="VARCHAR"/>
+        <result column="BY9" property="by9" jdbcType="VARCHAR"/>
+        <result column="BY10" property="by10" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID, SORTINGTABLEID, SORTINGTABLESTATUSBAR, SORTINGTABLEPROPERTIES, REMARKS, BY1,BY2,BY3,BY4,BY5,BY6,BY7,BY8,BY9,BY10
+    </sql>
+
+    <select id="findT_airport_sorting_tableById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from T_airport_sorting_table
+        where id=#{id}
+    </select>
+    
+    <select id="findT_airport_sorting_tableDataGrid" resultMap="BaseResultMap" parameterType="PageInfo">
+        SELECT * FROM (
+            SELECT TOP (${from}+${size}) ROW_NUMBER() OVER(ORDER BY ID ASC) AS rowid,
+            <include refid="Base_Column_List"/>
+            FROM T_airport_sorting_table P
+            <where>
+                <if test=" condition.REMARKS != null and condition.REMARKS != '' ">
+                    or p.sortingtableid like '%${condition.REMARKS}%'
+                    or p.sortingtablestatusbar like '%${condition.REMARKS}%'
+                    or p.sortingtableproperties like '%${condition.REMARKS}%'
+                    or p.remarks like '%${condition.REMARKS}%'
+                </if>
+            </where>
+            order by sortingtableid
+        ) AS t WHERE rowid &gt; ${from}
+    </select>
+
+    <select id="findT_airport_sorting_tableCount" resultType="java.lang.Integer" parameterType="PageInfo">
+        SELECT count(*) count
+        FROM T_airport_sorting_table P
+        <where>
+            <if test=" condition.REMARKS != null and condition.REMARKS != '' ">
+                or p.sortingtableid like '%${condition.REMARKS}%'
+                or p.sortingtablestatusbar like '%${condition.REMARKS}%'
+                or p.sortingtableproperties like '%${condition.REMARKS}%'
+                or p.remarks like '%${condition.REMARKS}%'
+            </if>
+        </where>
+    </select>
+    
+    <insert id="addT_airport_sorting_table" parameterType="T_airport_sorting_table">
+        insert into T_airport_sorting_table (SORTINGTABLEID, SORTINGTABLESTATUSBAR, SORTINGTABLEPROPERTIES, REMARKS, BY1,BY2,BY3,BY4,BY5,BY6,BY7,BY8,BY9,BY10)
+        values (
+          #{sortingtableid},
+          #{sortingtablestatusbar},
+          #{sortingtableproperties},
+          #{remarks},
+          #{by1},
+          #{by2},
+          #{by3},
+          #{by4},
+          #{by5},
+          #{by6},
+          #{by7},
+          #{by8},
+          #{by9},
+          #{by10}
+        )
+    </insert>
+    
+    <update id="updateT_airport_sorting_table" parameterType="T_airport_sorting_table">
+        update T_airport_sorting_table
+        set SORTINGTABLEID = #{sortingtableid},
+            SORTINGTABLESTATUSBAR = #{sortingtablestatusbar},
+            SORTINGTABLEPROPERTIES = #{sortingtableproperties},
+            REMARKS = #{remarks},
+            BY1 = #{by1},
+            BY2 = #{by2},
+            BY3 = #{by3},
+            BY4 = #{by4},
+            BY6 = #{by6},
+            BY7 = #{by7},
+            BY8 = #{by8},
+            BY9 = #{by9},
+            BY10 = #{by10}
+        where id=#{id}
+    </update>
+    
+    <delete id="delT_airport_sorting_table" >
+        delete from T_airport_sorting_table where id=#{id}
+    </delete>
+    
+    <select id="findT_airport_sorting_tableBySortingtableid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from T_airport_sorting_table
+        where sortingtableid = #{sortingtableid}
+    </select>
+
+</mapper>

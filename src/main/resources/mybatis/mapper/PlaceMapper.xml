@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.net.metadata.mapper.PlaceMapper">
+    <resultMap id="BaseResultMap" type="com.net.metadata.entity.Place">
+        <id column="place_no" property="place_no" jdbcType="BIGINT"/>
+        <result column="ESNAME" property="ESNAME" jdbcType="VARCHAR"/>
+        <result column="ICAO" property="ICAO" jdbcType="VARCHAR"/>
+        <result column="ELNAME" property="ELNAME" jdbcType="VARCHAR"/>
+        <result column="CSNAME" property="CSNAME" jdbcType="VARCHAR"/>
+        <result column="CLNAME" property="CLNAME" jdbcType="VARCHAR"/>
+        <result column="CSSNAME" property="CSSNAME" jdbcType="VARCHAR"/>
+        <result column="GJBZ" property="GJBZ" jdbcType="VARCHAR"/>
+        <result column="BY1" property="BY1" jdbcType="VARCHAR"/>
+        <result column="BY2" property="BY2" jdbcType="VARCHAR"/>
+        <result column="BY3" property="BY3" jdbcType="VARCHAR"/>
+        <result column="BY4" property="BY4" jdbcType="VARCHAR"/>
+        <result column="BY5" property="BY5" jdbcType="VARCHAR"/>
+        <result column="BY6" property="BY6" jdbcType="VARCHAR"/>
+        <result column="BY7" property="BY7" jdbcType="VARCHAR"/>
+        <result column="BY8" property="BY8" jdbcType="VARCHAR"/>
+        <result column="BY9" property="BY9" jdbcType="VARCHAR"/>
+        <result column="BY10" property="BY10" jdbcType="VARCHAR"/>
+
+    </resultMap>
+    <sql id="Base_Column_List"> 
+     place_no, ESNAME, ICAO, ELNAME, CSNAME,CLNAME, CSSNAME,GJBZ, BY1,BY2,BY3,BY4,BY5,BY6,BY7,BY8,BY9,BY10
+   </sql>
+
+    <select id="findPlacePageCondition" resultMap="BaseResultMap" parameterType="PageInfo">
+        SELECT * FROM (
+            SELECT TOP (${from}+${size}) ROW_NUMBER() OVER(ORDER BY PLACE_NO ASC) AS rowid,* FROM Place p
+            <where>
+                <if test=" condition.ESNAME != null and condition.ESNAME != '' ">
+                    or p.place_no like '%${condition.ESNAME}%'
+                    or p.ESNAME like '%${condition.ESNAME}%'
+                    or p.ICAO like '%${condition.ESNAME}%'
+                    or p.ELNAME like '%${condition.ESNAME}%'
+                    or p.CSNAME like '%${condition.ESNAME}%'
+                    or p.CLNAME like '%${condition.ESNAME}%'
+                    or p.CSSNAME like '%${condition.ESNAME}%'
+                    or p.GJBZ like '%${condition.CODE}%'
+                </if>
+            </where>
+            order by ${sort} ${order}
+        ) AS t WHERE rowid &gt; ${from}
+    </select>
+
+    <select id="findPlacePageCount" resultType="java.lang.Integer" parameterType="PageInfo">
+        select count(*) count
+        from Place p
+        <where>
+            <if test=" condition.ESNAME != null and condition.ESNAME != '' ">
+                or p.place_no like '%${condition.ESNAME}%'
+                or p.ESNAME like '%${condition.ESNAME}%'
+                or p.ICAO like '%${condition.ESNAME}%'
+                or p.ELNAME like '%${condition.ESNAME}%'
+                or p.CSNAME like '%${condition.ESNAME}%'
+                or p.CLNAME like '%${condition.ESNAME}%'
+                or p.CSSNAME like '%${condition.ESNAME}%'
+                or p.GJBZ like '%${condition.CODE}%'
+            </if>
+        </where>
+    </select>
+
+    <select id="findPlaceAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from Place order by place_no
+    </select>
+
+    <select id="findPlaceById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from Place
+        where place_no = #{place_no,jdbcType=BIGINT}
+    </select>
+
+    <select id="findPlaceByplace_no" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from Place
+        where place_no = #{place_no,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" parameterType="Place">
+        insert into Place (ESNAME, ICAO, ELNAME, CSNAME,CLNAME, CSSNAME,GJBZ, BY1,BY2,BY3,BY4,BY5,BY6,BY7,BY8,BY9,BY10)
+        values (
+            #{ESNAME,jdbcType=VARCHAR},
+            #{ICAO,jdbcType=VARCHAR},
+            #{ELNAME,jdbcType=VARCHAR},
+            #{CSNAME,jdbcType=VARCHAR},
+            #{CLNAME,jdbcType=VARCHAR},
+            #{CSSNAME,jdbcType=VARCHAR},
+            #{GJBZ,jdbcType=VARCHAR},
+            #{BY1,jdbcType=VARCHAR},
+            #{BY2,jdbcType=VARCHAR},
+            #{BY3,jdbcType=VARCHAR},
+            #{BY4,jdbcType=VARCHAR},
+            #{BY5,jdbcType=VARCHAR},
+            #{BY6,jdbcType=VARCHAR},
+            #{BY7,jdbcType=VARCHAR},
+            #{BY8,jdbcType=VARCHAR},
+            #{BY9,jdbcType=VARCHAR},
+            #{BY10,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="updatePlace" parameterType="Place">
+        update Place
+        <set>
+            <if test="place_no != null">
+                place_no = #{place_no,jdbcType=BIGINT},
+            </if>
+            <if test="ESNAME != null">
+                ESNAME = #{ESNAME,jdbcType=VARCHAR},
+            </if>
+            <if test="ICAO != null">
+                ICAO = #{ICAO,jdbcType=VARCHAR},
+            </if>
+            <if test="ELNAME != null">
+                ELNAME = #{ELNAME,jdbcType=VARCHAR},
+            </if>
+            <if test="CSNAME != null">
+                CSNAME = #{CSNAME,jdbcType=VARCHAR},
+            </if>
+            <if test="CLNAME != null">
+                CLNAME = #{CLNAME,jdbcType=VARCHAR},
+            </if>
+            <if test="CSSNAME != null">
+                CSSNAME = #{CSSNAME,jdbcType=VARCHAR},
+            </if>
+            <if test="GJBZ != null">
+                GJBZ = #{GJBZ,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where place_no = #{place_no,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deletePlaceById" parameterType="java.lang.Long">
+        delete from Place where place_no = #{place_no,jdbcType=BIGINT}
+  </delete>
+</mapper>

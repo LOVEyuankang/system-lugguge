@@ -1,0 +1,75 @@
+server:
+  port: 8998
+  tomcat:                   # 配置Tomcat
+    uri-encoding: UTF-8     # 配置Tomcat编码,默认为UTF-8
+    max-threads: 1000       # 配置最大线程数
+    max-connections: 20000  # 最大允许的连接数，nio默认10000
+    accept-count: 100       # 达到 max-connections 之后，允许等待的连接数量
+
+spring:
+  thymeleaf:
+    cache: false        # 配置不缓存页面，支持热部署
+  mvc:                  # 配置视图映射器
+    view:
+      order: 10
+      suffix: .jsp      # 视图的后缀名
+      prefix: /WEB-INF/views/        # 视图的前缀
+      date-format: yyyy-MM-dd       # 设定日期的格式
+  http:                  # 配置http请求
+    encoding:           # 编码格式配置
+      force: true       # 是否强制对http请求和响应进行编码，默认为true
+      charset: UTF-8    # 指定http请求和相应的Charset，默认: UTF-8
+      enabled: true     # 是否开启http的编码支持，默认为true
+  servlet:                      # 配置上传文件大小
+    multipart:
+      enabled: true
+      max-file-size: 10Mb
+      max-request-size: 100Mb
+  activemq:                     # ActiveMQ 配置
+    user: amdin
+    password: admin
+    broker-url: tcp://192.168.0.187:61616
+    pool:
+      enabled: true
+      max-connections: 50
+    packages:
+      trust-all: true
+  datasource:           # 配置数据源
+    url: jdbc:sqlserver://192.168.0.251:1433;DatabaseName=brsdata
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    username: brs
+    password: brs
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5              # 最小空闲连接数量
+      maximum-pool-size: 15        # 连接池最大连接数，默认是15
+      auto-commit: true            # 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+      idle-timeout: 30000          # 空闲连接存活最大时间(以秒数为单位)
+      pool-name: DatebookHikariCP  # 连接池母子
+      max-lifetime: 1800000        # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      connection-timeout: 30000    # 数据库连接超时时间,默认30秒，即30000
+      connection-test-query: SELECT TOP 1 1 FROM USERS   # 检测数据库的查询语句
+  redis:                    # redis 配置
+#       maxTotal: 5000       #最大连接数
+#      database: 9           # 数据库
+#      host: 127.0.0.1       # 连接地址
+#      port: 6379            # 端口号
+#      password:             # Redis服务器连接密码（默认为空）
+      jedis:                # 通过jedis进行连接池管理
+        pool:
+          max-active: 5000  # 最大连接数
+          max-idle: 30      # 最大空闲连接数
+          min-idle: 5       # 最小空闲连接数
+          max-wait: -1      # 最大阻塞等待时间，负值为无限制
+      timeout: 5000         # 连接超时时间（毫秒）
+      commandTimeout: 50000 # redis操作的超时时间
+      maxAttempts: 5        # 出现异常最大重试次数
+      cluster:              # redis集群
+        nodes: 192.168.117.128:7001,192.168.117.128:7002,192.168.117.128:7003,192.168.117.128:7004,192.168.117.128:7005,192.168.117.128:7006
+        max-redirects: 5   # 跨集群执行命令时要遵循的最大重定向数量
+
+mybatis:
+  mapper-locations: classpath:/mybatis/mapper/*.xml
+  config-location:  classpath:/mybatis/config/mybatis-config.xml
+
+

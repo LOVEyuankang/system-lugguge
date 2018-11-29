@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.net.metadata.mapper.PostinfoMapper">
+    <resultMap id="BaseResultMap" type="com.net.metadata.entity.Postinfo">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="postname" property="postname" jdbcType="VARCHAR"/>
+        <result column="deptid" property="deptid" jdbcType="VARCHAR"/>
+        <result column="postremark" property="postremark" jdbcType="VARCHAR"/>
+        <result column="createdate" property="createdate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+      id, postname, deptid, postremark, createdate
+    </sql>
+
+    <select id="findPostinfoById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from postinfo
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="findPostinfoAllByDeptid" resultMap="BaseResultMap"  parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from postinfo
+        where deptid = #{deptid,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deletePostinfoById" parameterType="java.lang.Long">
+      delete from postinfo where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert" parameterType="Postinfo">
+        insert into postinfo (postname, deptid, postremark, createdate)
+        values (#{postname,jdbcType=VARCHAR}, #{deptid,jdbcType=VARCHAR}, #{postremark,jdbcType=VARCHAR}, convert(char(19),GetDate(),120))
+    </insert>
+
+    <update id="updatePostinfo" parameterType="Postinfo">
+        update postinfo
+        <set>
+            <if test="deptid != null">
+                deptid = #{deptid,jdbcType=VARCHAR},
+            </if>
+            <if test="postname != null">
+                postname = #{postname,jdbcType=VARCHAR},
+            </if>
+            <if test="postremark != null">
+                postremark = #{postremark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.net.metadata.mapper.T_airport_check_in_countersMapper">
+    <resultMap id="BaseResultMap" type="com.net.metadata.entity.T_airport_check_in_counters">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="CHECKINID" property="checkinid" jdbcType="VARCHAR"/>
+        <result column="CHECKINCOUNTERSID" property="checkincountersid" jdbcType="VARCHAR"/>
+        <result column="STATUSBAR" property="statusbar" jdbcType="VARCHAR"/>
+        <result column="CHECKINPROPERTIES" property="checkinproperties" jdbcType="VARCHAR"/>
+        <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+        <result column="BY1" property="by1" jdbcType="VARCHAR"/>
+        <result column="BY2" property="by2" jdbcType="VARCHAR"/>
+        <result column="BY3" property="by3" jdbcType="VARCHAR"/>
+        <result column="BY4" property="by4" jdbcType="VARCHAR"/>
+        <result column="BY5" property="by5" jdbcType="VARCHAR"/>
+        <result column="BY6" property="by6" jdbcType="VARCHAR"/>
+        <result column="BY7" property="by7" jdbcType="VARCHAR"/>
+        <result column="BY8" property="by8" jdbcType="VARCHAR"/>
+        <result column="BY9" property="by9" jdbcType="VARCHAR"/>
+        <result column="BY10" property="by10" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,checkinid,checkincountersid,statusbar,checkinproperties,remarks,by1,by2,by3,by4,by5,by6,by7,by8,by9,by10
+    </sql>
+
+    <select id="findT_airport_check_in_countersById" resultType="T_airport_check_in_counters">
+        select
+        <include refid="Base_Column_List"/>
+        from T_airport_check_in_counters
+        where id=#{id}
+    </select>
+    
+    <select id="findT_airport_check_in_countersDataGrid" resultType="T_airport_check_in_counters" parameterType="T_airport_check_in_counters">
+        SELECT * FROM (
+            SELECT TOP (${from}+${size}) ROW_NUMBER() OVER(ORDER BY ID ASC) AS rowid,
+            <include refid="Base_Column_List"/>
+            FROM T_airport_check_in_counters P
+            <where>
+                <if test=" condition.REMARKS != null and condition.REMARKS != '' ">
+                    or p.checkinid like '%${condition.REMARKS}%'
+                    or p.checkincountersid like '%${condition.REMARKS}%'
+                    or p.statusbar like '%${condition.REMARKS}%'
+                    or p.checkinproperties like '%${condition.REMARKS}%'
+                    or p.remarks like '%${condition.REMARKS}%'
+                </if>
+            </where>
+            order by checkinid
+        ) AS t WHERE rowid &gt; ${from}
+    </select>
+
+    <select id="findT_airport_check_in_countersCount" resultType="java.lang.Integer"  parameterType="T_airport_check_in_counters">
+        SELECT count(*) count
+        FROM T_airport_check_in_counters P
+        <where>
+            <if test=" condition.REMARKS != null and condition.REMARKS != '' ">
+                or p.checkinid like '%${condition.REMARKS}%'
+                or p.checkincountersid like '%${condition.REMARKS}%'
+                or p.statusbar like '%${condition.REMARKS}%'
+                or p.checkinproperties like '%${condition.REMARKS}%'
+                or p.remarks like '%${condition.REMARKS}%'
+            </if>
+        </where>
+    </select>
+    
+    <insert id="addT_airport_check_in_counters" parameterType="T_airport_check_in_counters">
+        insert into T_airport_check_in_counters (CHECKINID, CHECKINCOUNTERSID, STATUSBAR, CHECKINPROPERTIES, REMARKS, BY1,BY2,BY3,BY4,BY5,BY6,BY7,BY8,BY9,BY10)
+        values (
+          #{checkinid},
+          #{checkincountersid},
+          #{statusbar},
+          #{checkinproperties},
+          #{remarks},
+          #{by1},
+          #{by2},
+          #{by3},
+          #{by4},
+          #{by5},
+          #{by6},
+          #{by7},
+          #{by8},
+          #{by9},
+          #{by10}
+        )
+    </insert>
+    
+    <update id="updateT_airport_check_in_counters" parameterType="T_airport_check_in_counters">
+        update T_airport_check_in_counters
+        set CHECKINID = #{checkinid},
+            CHECKINCOUNTERSID = #{checkincountersid},
+            STATUSBAR = #{statusbar},
+            CHECKINPROPERTIES = #{checkinproperties},
+            REMARKS = #{remarks},
+            BY1 = #{by1},
+            BY2 = #{by2},
+            BY3 = #{by3},
+            BY4 = #{by4},
+            BY6 = #{by6},
+            BY7 = #{by7},
+            BY8 = #{by8},
+            BY9 = #{by9},
+            BY10 = #{by10}
+        where id=#{id}
+    </update>
+    
+    <delete id="delT_airport_check_in_counters">
+        delete from T_airport_check_in_counters where id=#{id}
+    </delete>
+    
+    <select id="findT_airport_check_in_countersByCheckinid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from T_airport_check_in_counters
+        where checkinid=#{checkinid}
+    </select>
+
+    <select id="findT_airport_check_in_countersByCheckincountersid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from T_airport_check_in_counters
+        where checkincountersid=#{checkincountersid}
+    </select>
+
+</mapper>
